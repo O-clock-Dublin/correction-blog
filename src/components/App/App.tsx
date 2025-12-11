@@ -5,7 +5,7 @@ import categoriesData from "../../data/categories";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import Posts from "../Posts/Posts";
-
+import Loader from "../Loader/Loader";
 import "./App.scss";
 import { IPost } from "../../@types";
 
@@ -14,6 +14,8 @@ function App() {
   const [zenModeEnabled, setZenModeEnabled] = useState(false);
   // zenModeEnabled : variable pour lire la valeur actuelle
   // setZenModeEnabled : fonction qui permet de changer la valeur
+
+  const [isLoading, setIsLoading] = useState(true);
 
   //Je crée un state pour manager mes posts
   //const [posts, setPosts] = useState([postsData]);
@@ -42,6 +44,8 @@ function App() {
       setError(
         "Impossible de récupérer les données. Veuillez réessayer plus tard."
       );
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -88,7 +92,9 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
-      {error ? (
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
         <div className="error-message">{error}</div>
       ) : (
         <Posts posts={datas} isZenModeEnabled={zenModeEnabled} />
