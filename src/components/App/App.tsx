@@ -22,17 +22,27 @@ function App() {
   const [search, setSearch] = useState("");
 
   const [datas, setDatas] = useState<IPost[]>([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const httpResponse = await fetch(
-        "https://oclock-api.vercel.app/api/blog/posts"
+    try {
+      const fetchData = async () => {
+        const httpResponse = await fetch(
+          "https://oclock-api.vercel.app/api/blog/posts"
+        );
+        if (!httpResponse.ok) {
+          throw new Error("Fetch error");
+        }
+        const dataArray = await httpResponse.json();
+        console.log(dataArray);
+        setDatas(dataArray);
+      };
+      fetchData();
+    } catch (e) {
+      setError(
+        "Impossible de récupérer les données. Veuillez réessayer plus tard."
       );
-      const dataArray = await httpResponse.json();
-      console.log(dataArray);
-      setDatas(dataArray);
-    };
-    fetchData();
+    }
   }, []);
 
   //Je crée la fonction qui me permet de mettre à jour le state search
@@ -78,7 +88,11 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
-      <Posts posts={datas} isZenModeEnabled={zenModeEnabled} />
+      {error ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <Posts posts={datas} isZenModeEnabled={zenModeEnabled} />
+      )}
       <Footer />
     </div>
   );
