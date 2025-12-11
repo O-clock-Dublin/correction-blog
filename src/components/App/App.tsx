@@ -57,7 +57,7 @@ function App() {
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
-  function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement) {
+  function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     //Je récupère la valeur de l'input
     const value = e.target.value.trim().toLowerCase();
     setSearch(value);
