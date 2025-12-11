@@ -1,36 +1,53 @@
-import { useState } from "react"
+import { useEffect, useState } from "react";
 
-import categoriesData from "../../data/categories"
-import postsData from "../../data/posts"
-import Footer from "../Footer/Footer"
-import Header from "../Header/Header"
-import Posts from "../Posts/Posts"
+import categoriesData from "../../data/categories";
+import postsData from "../../data/posts";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
+import Posts from "../Posts/Posts";
 
-import "./App.scss"
+import "./App.scss";
 
 function App() {
   // Indique si le mode zen est activé
-  const [zenModeEnabled, setZenModeEnabled] = useState(false)
+  const [zenModeEnabled, setZenModeEnabled] = useState(false);
   // zenModeEnabled : variable pour lire la valeur actuelle
   // setZenModeEnabled : fonction qui permet de changer la valeur
 
-  //Je crée un state pour manager mes posts
-  const [posts, setPosts] = useState(postsData)
+  // Create state to stock posts (initial)
+  const [posts, setPosts] = useState([]);
+
+  // Create function using useEffect to call API and stock data(posts)
+  // useEffect(() => {SETUP}, [DEPENDENCIES])
+  useEffect(async () => {
+    // Call API
+    const httpResponse = await fetch(
+      "https://oclock-api.vercel.app/api/blog/posts"
+    );
+    // Get data in json
+    const data = await httpResponse.json();
+
+    // stock new data in
+    return setPosts(data);
+  }, []);
+
+  // //Je crée un state pour manager mes posts
+  // const [posts, setPosts] = useState(postsData)
 
   //Je crée un state pour controler mon input search
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
   function handleChangeSearchInput(e) {
     //Je récupère la valeur de l'input
-    const value = e.target.value.trim().toLowerCase()
-    setSearch(value)
+    const value = e.target.value.trim().toLowerCase();
+    setSearch(value);
     //filtrer les posts pour ne garder que les posts correspondant à la recherche
     const filteredPosts = postsData.filter((post) =>
       post.title.toLowerCase().includes(value)
-    )
-    setPosts(filteredPosts)
+    );
+    setPosts(filteredPosts);
   }
 
   //Fonction inutile en l'etat mais décompose le process de filtrage des posts
@@ -66,7 +83,7 @@ function App() {
       <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
