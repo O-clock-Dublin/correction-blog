@@ -6,7 +6,7 @@ import postsData from "../../data/posts";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import Posts from "../Posts/Posts";
-
+import { Loader } from "../Loader/Loader";
 import "./App.scss";
 import { IArticle } from "../../@types";
 
@@ -23,6 +23,8 @@ function App() {
   const [search, setSearch] = useState("");
 
   const [articles, setArticles] = useState<IArticle[]>([]);
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
@@ -54,12 +56,23 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const httpRequest = await fetch(
-        "https://oclock-api.vercel.app/api/blog/posts"
-      );
-      const data = await httpRequest.json();
-      console.log(data);
-      return setArticles(data);
+      try {
+        const httpRequest = await fetch(
+          "https://oclock-api.vercel.app/api/blog/posts"
+        );
+        if (httpRequest.ok === false) {
+          throw new Error("Erreur lors du fetch");
+        }
+        const data = await httpRequest.json();
+        console.log(data);
+        return setArticles(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("Une erreur est survenue..");
+        }
+      }
     };
     fetchData();
   }, []);
@@ -78,8 +91,10 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
+      {errorMessage && <div className="err-message"> {errorMessage}</div>}
       <Posts isZenModeEnabled={zenModeEnabled} articles={articles} />
       <Footer />
+      <Loader />
     </div>
   );
 }
