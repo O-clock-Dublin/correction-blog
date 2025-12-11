@@ -13,3 +13,11 @@ export interface ICategory {
   route: string;
   label: string;
 }
+
+export interface IArticle {
+  id: number;
+  category: string;
+  slug: string;
+  exerpt: string;
+  content: string;
+}

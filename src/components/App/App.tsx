@@ -1,36 +1,39 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import categoriesData from "../../data/categories"
-import postsData from "../../data/posts"
-import Footer from "../Footer/Footer"
-import Header from "../Header/Header"
-import Posts from "../Posts/Posts"
+import categoriesData from "../../data/categories";
+import postsData from "../../data/posts";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
+import Posts from "../Posts/Posts";
 
-import "./App.scss"
+import "./App.scss";
+import { IArticle } from "../../@types";
 
 function App() {
   // Indique si le mode zen est activé
-  const [zenModeEnabled, setZenModeEnabled] = useState(false)
+  const [zenModeEnabled, setZenModeEnabled] = useState(false);
   // zenModeEnabled : variable pour lire la valeur actuelle
   // setZenModeEnabled : fonction qui permet de changer la valeur
 
   //Je crée un state pour manager mes posts
-  const [posts, setPosts] = useState(postsData)
+  const [posts, setPosts] = useState(postsData);
 
   //Je crée un state pour controler mon input search
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
+
+  const [articles, setArticles] = useState<IArticle[]>([]);
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
   function handleChangeSearchInput(e) {
     //Je récupère la valeur de l'input
-    const value = e.target.value.trim().toLowerCase()
-    setSearch(value)
+    const value = e.target.value.trim().toLowerCase();
+    setSearch(value);
     //filtrer les posts pour ne garder que les posts correspondant à la recherche
     const filteredPosts = postsData.filter((post) =>
       post.title.toLowerCase().includes(value)
-    )
-    setPosts(filteredPosts)
+    );
+    setPosts(filteredPosts);
   }
 
   //Fonction inutile en l'etat mais décompose le process de filtrage des posts
@@ -63,10 +66,15 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
-      <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
+      <Posts
+        posts={posts}
+        isZenModeEnabled={zenModeEnabled}
+        articles={articles}
+        setArticles={setArticles}
+      />
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
