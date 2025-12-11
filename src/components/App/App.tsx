@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
+import { IPost } from "../../@types"
 import categoriesData from "../../data/categories"
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
@@ -15,14 +16,29 @@ function App() {
   // setZenModeEnabled : fonction qui permet de changer la valeur
 
   //Je crée un state pour manager mes posts
-  const [posts, setPosts] = useState(postsData)
+  // Initialisé avec un tableau vide, on le remplira avec les données de l'API
+  const [posts, setPosts] = useState<IPost[]>([])
+
+  // Au premier rendu du composant, on récupère les articles depuis l'API
+  useEffect(() => {
+    // Créé et execute une fonction asynchrone qui fait le call API
+    async function fetchPosts() {
+      // le call API
+      const response = await fetch("https://oclock-api.vercel.app/api/blog/posts")
+      const data = await response.json()
+      // l'enregistrement des posts reçus dans le state
+      setPosts(data)
+    }
+
+    fetchPosts()
+  }, [])
 
   //Je crée un state pour controler mon input search
   const [search, setSearch] = useState("")
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
-  function handleChangeSearchInput(e) {
+  function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     //Je récupère la valeur de l'input
     const value = e.target.value.trim().toLowerCase()
     setSearch(value)
