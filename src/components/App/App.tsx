@@ -26,6 +26,8 @@ function App() {
 
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
   function handleChangeSearchInput(e) {
@@ -64,7 +66,7 @@ function App() {
           throw new Error("Erreur lors du fetch");
         }
         const data = await httpRequest.json();
-        console.log(data);
+
         return setArticles(data);
       } catch (error) {
         if (error instanceof Error) {
@@ -72,6 +74,8 @@ function App() {
         } else {
           setErrorMessage("Une erreur est survenue..");
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
@@ -91,10 +95,11 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
+      {isLoading && <Loader />}
+
       {errorMessage && <div className="err-message"> {errorMessage}</div>}
       <Posts isZenModeEnabled={zenModeEnabled} articles={articles} />
       <Footer />
-      <Loader />
     </div>
   );
 }
