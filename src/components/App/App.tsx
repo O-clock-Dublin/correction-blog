@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
 import categoriesData from "../../data/categories";
-import postsData from "../../data/posts";
+// import postsData from "../../data/posts";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import Posts from "../Posts/Posts";
+import { IPost } from "../../@types";
 
 import "./App.scss";
 
@@ -14,21 +15,38 @@ function App() {
   // zenModeEnabled : variable pour lire la valeur actuelle
   // setZenModeEnabled : fonction qui permet de changer la valeur
 
+  // Create state to manage/stock error
+  const [error, setError] = useState("");
+
   // Create state to stock posts (initial)
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   // Create function using useEffect to call API and stock data(posts)
   // useEffect(() => {SETUP}, [DEPENDENCIES])
-  useEffect(async () => {
-    // Call API
-    const httpResponse = await fetch(
-      "https://oclock-api.vercel.app/api/blog/posts"
-    );
-    // Get data in json
-    const data = await httpResponse.json();
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const httpResponse = await fetch(
+          "https://oclock-api.vercel.app/api/blog/posts"
+        );
 
-    // stock new data in
-    return setPosts(data);
+        if (!httpResponse.ok) {
+          throw new Error("Echec de la récupération des articles");
+        }
+
+        const data: IPost[] = await httpResponse.json();
+        setPosts(data);
+        setError("");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Error");
+        }
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   // //Je crée un state pour manager mes posts
@@ -39,12 +57,12 @@ function App() {
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
-  function handleChangeSearchInput(e) {
+  function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement) {
     //Je récupère la valeur de l'input
     const value = e.target.value.trim().toLowerCase();
     setSearch(value);
     //filtrer les posts pour ne garder que les posts correspondant à la recherche
-    const filteredPosts = postsData.filter((post) =>
+    const filteredPosts = posts.filter((post) =>
       post.title.toLowerCase().includes(value)
     );
     setPosts(filteredPosts);
@@ -80,6 +98,10 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
+
+      {/* Condition to show error message if exists */}
+      {error && <p className="error-message">{error}</p>}
+
       <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
       <Footer />
     </div>
