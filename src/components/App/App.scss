@@ -1,4 +1,4 @@
-@use './../../styles/vars';
+@use "./../../styles/vars";
 
 .app {
   font-family: vars.$global-font;
@@ -8,4 +8,10 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  .search {
+    font-size: 1em;
+    padding: 0.5em;
+    width: 70%;
+    margin: 2rem auto vars.$gutter;
+  }
 }

@@ -1,7 +1,7 @@
 // une boîte à outils pour les couleurs
 // https://sass-lang.com/documentation/modules/color/
-@use 'sass:color';
-@use 'src/styles/vars';
+@use "sass:color";
+@use "src/styles/vars";
 
 .menu {
   text-align: center;
@@ -14,7 +14,8 @@
     color: vars.$dark-color;
     padding: 8px;
 
-    &:hover {
+    &:hover,
+    &.selected {
       color: vars.$primary-color;
     }
   }
