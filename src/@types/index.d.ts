@@ -18,6 +18,7 @@ export interface IArticle {
   id: number;
   category: string;
   slug: string;
-  exerpt: string;
+  title: string;
+  excerpt: string;
   content: string;
 }

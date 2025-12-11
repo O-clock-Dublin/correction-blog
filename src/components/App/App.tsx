@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
 import categoriesData from "../../data/categories";
 import postsData from "../../data/posts";
@@ -51,6 +52,17 @@ function App() {
   //   setPosts(filteredPosts)
   // }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const httpRequest = await fetch(
+        "https://oclock-api.vercel.app/api/blog/posts"
+      );
+      const data = await httpRequest.json();
+      console.log(data);
+      return setArticles(data);
+    };
+    fetchData();
+  }, []);
   return (
     <div className="app">
       <Header
@@ -66,12 +78,7 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
-      <Posts
-        posts={posts}
-        isZenModeEnabled={zenModeEnabled}
-        articles={articles}
-        setArticles={setArticles}
-      />
+      <Posts isZenModeEnabled={zenModeEnabled} articles={articles} />
       <Footer />
     </div>
   );
