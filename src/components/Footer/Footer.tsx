@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./Footer.scss"
 
 function Footer() {
@@ -13,7 +13,7 @@ function Footer() {
 
   //Je crée une fonction qui gère l'input password
   //qui modifie la valeur de password
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     //Je cache l'encart de confirmation
     setIsSubmitted(false)
     //Je recupère la valeur de l'input utilisateur
@@ -28,9 +28,28 @@ function Footer() {
     // Ce qui affiche l'encadré de confirmation dans le footer
     setIsSubmitted(true)
     alert(email)
-    //Je reinitialise l'input email
-    setEmail("")
+    //Je reinitialise l'input email après un court délai pour permettre le scroll
+    // setEmail("")
   }
+
+  // Scroll automatique quand le message de validation apparaît
+  useEffect(() => {
+    // on ne veut pas appliquer de traitement pour le premier rendu => à ce moment-là email est vide
+    // On vérifie aussi que isSubmitted est true pour ne scroller que quand le message apparaît
+    if (email !== "" && isSubmitted) {
+      // console.log('il faudrait scroll en bas');
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTo
+      // => déplacer la scrollbar à la position indiquée
+      window.scrollTo({
+        // la hauteur totale du document (scrollHeight = la hauteur d'un élément y compris la zone non visible à cause d'un overflow)
+        top: document.documentElement.scrollHeight,
+        left: 0, // pas de scrollbar horizontale donc on met 0
+        behavior: "smooth", // on veut un déplacement fluide, progressif
+      })
+    }
+  }, [email, isSubmitted])
+  // effet qui se déclenche après le premier rendu et quand email ou isSubmitted change de valeur
 
   // Alternative écriture
   // const handleSubmit = () => {
@@ -62,8 +81,8 @@ function Footer() {
       </form>
       {isSubmitted && (
         <div className="confirm">
-          Vous êtes maintenant abonné à la newsletter avec l'adresse
-          toto@mail.com
+          Vous êtes maintenant abonné à la newsletter avec l'adresse{" "}
+          {email}
         </div>
       )}
     </footer>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import { IPost } from "../../@types"
+import { ICategory, IPost } from "../../@types"
 import categoriesData from "../../data/categories"
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
@@ -19,6 +19,10 @@ function App() {
   //Je crée un state pour manager mes posts
   // Initialisé avec un tableau vide, on le remplira avec les données de l'API
   const [posts, setPosts] = useState<IPost[]>([])
+
+  //Je crée un state pour manager mes catégories
+  // Initialisé avec un tableau vide, on le remplira avec les données de l'API
+  const [categories, setCategories] = useState<ICategory[]>([])
 
   //Je crée un state pour stocker l'état d'erreur
   // Initialisé à chaine vide puisqu'au debut il n'y a pas d'erreur
@@ -52,6 +56,29 @@ function App() {
     }
 
     fetchPosts()
+  }, [])
+
+  // Au premier rendu du composant, on récupère les catégories depuis l'API
+  useEffect(() => {
+    // Créé et execute une fonction asynchrone qui fait le call API
+    async function fetchCategories() {
+      try {
+        // le call API
+        const response = await fetch("https://oclock-api.vercel.app/api/blog/categories")
+        // Après le fetch, ajoute une condition qui indique que si la propriété httpResponse.ok est false, on throw une erreur
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`)
+        }
+        const data = await response.json()
+        // l'enregistrement des catégories reçues dans le state
+        setCategories(data)
+      } catch (err) {
+        // Dans le bloc catch, enregistre l'erreur dans le state
+        setError(err instanceof Error ? err.message : "Une erreur est survenue lors du chargement des catégories")
+      }
+    }
+
+    fetchCategories()
   }, [])
 
   //Je crée un state pour controler mon input search
@@ -88,7 +115,7 @@ function App() {
   return (
     <div className="app">
       <Header
-        categories={categoriesData}
+        categories={categories.length > 0 ? categories : categoriesData}
         isZenModeEnabled={zenModeEnabled}
         changeZenMode={setZenModeEnabled}
         search={search}
