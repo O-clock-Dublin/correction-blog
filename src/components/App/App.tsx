@@ -5,6 +5,7 @@ import categoriesData from "../../data/categories"
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
 import Header from "../Header/Header"
+import Loader from "../Loader/Loader"
 import Posts from "../Posts/Posts"
 
 import "./App.scss"
@@ -23,6 +24,10 @@ function App() {
   // Initialisé à chaine vide puisqu'au debut il n'y a pas d'erreur
   const [error, setError] = useState("")
 
+  //Je crée un state pour stocker l'état de chargement
+  // Initialise le à true puisque dès le premier rendu on voudra afficher le loader
+  const [isLoading, setIsLoading] = useState(true)
+
   // Au premier rendu du composant, on récupère les articles depuis l'API
   useEffect(() => {
     // Créé et execute une fonction asynchrone qui fait le call API
@@ -40,6 +45,9 @@ function App() {
       } catch (err) {
         // Dans le bloc catch, enregistre l'erreur dans le state
         setError(err instanceof Error ? err.message : "Une erreur est survenue lors du chargement des articles")
+      } finally {
+        // Passe le state à false après le call API (qu'il se soit bien ou mal passé)
+        setIsLoading(false)
       }
     }
 
@@ -94,7 +102,14 @@ function App() {
       />
       {/* Utilise cet état pour conditionner l'affichage d'un message d'erreur dans le JSX */}
       {error && <div className="error-message">{error}</div>}
-      <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
+      {/* Utilise cet état pour conditionner l'affichage du composant Loader */}
+      {isLoading ? (
+        <div style={{ display: "flex", justifyContent: "center", margin: "2rem" }}>
+          <Loader />
+        </div>
+      ) : (
+        <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
+      )}
       <Footer />
     </div>
   )
