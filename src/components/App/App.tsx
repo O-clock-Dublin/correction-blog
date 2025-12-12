@@ -19,15 +19,28 @@ function App() {
   // Initialisé avec un tableau vide, on le remplira avec les données de l'API
   const [posts, setPosts] = useState<IPost[]>([])
 
+  //Je crée un state pour stocker l'état d'erreur
+  // Initialisé à chaine vide puisqu'au debut il n'y a pas d'erreur
+  const [error, setError] = useState("")
+
   // Au premier rendu du composant, on récupère les articles depuis l'API
   useEffect(() => {
     // Créé et execute une fonction asynchrone qui fait le call API
     async function fetchPosts() {
-      // le call API
-      const response = await fetch("https://oclock-api.vercel.app/api/blog/posts")
-      const data = await response.json()
-      // l'enregistrement des posts reçus dans le state
-      setPosts(data)
+      try {
+        // le call API
+        const response = await fetch("https://oclock-api.vercel.app/api/blog/posts")
+        // Après le fetch, ajoute une condition qui indique que si la propriété httpResponse.ok est false, on throw une erreur
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`)
+        }
+        const data = await response.json()
+        // l'enregistrement des posts reçus dans le state
+        setPosts(data)
+      } catch (err) {
+        // Dans le bloc catch, enregistre l'erreur dans le state
+        setError(err instanceof Error ? err.message : "Une erreur est survenue lors du chargement des articles")
+      }
     }
 
     fetchPosts()
@@ -79,6 +92,8 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
+      {/* Utilise cet état pour conditionner l'affichage d'un message d'erreur dans le JSX */}
+      {error && <div className="error-message">{error}</div>}
       <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
       <Footer />
     </div>
