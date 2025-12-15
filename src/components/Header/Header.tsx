@@ -1,3 +1,4 @@
+// src/components/Header/Header.tsx
 import { ICategory } from "../../@types"
 import "./Header.scss"
 

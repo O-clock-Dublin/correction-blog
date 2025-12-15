@@ -1,3 +1,4 @@
+// src/components/App/App.tsx
 import { useEffect, useState } from "react"
 
 import postsData from "../../data/posts"
@@ -36,7 +37,7 @@ function App() {
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
-  function handleChangeSearchInput(e) {
+  function handleChangeSearchInput(e: { target: { value: string } }) {
     //Je récupère la valeur de l'input
     const value = e.target.value.trim().toLowerCase()
     setSearch(value)

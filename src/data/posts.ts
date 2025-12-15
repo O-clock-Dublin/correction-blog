@@ -1,3 +1,4 @@
+// src/data/posts.ts
 export default [
   {
     id: 1,

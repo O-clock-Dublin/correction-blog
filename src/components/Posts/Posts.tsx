@@ -1,3 +1,4 @@
+// src/components/Posts/Posts.tsx
 import { IPost } from "../../@types"
 import Post from "../Post/Post"
 

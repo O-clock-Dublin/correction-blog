@@ -1,3 +1,4 @@
+// src/data/categories.ts
 export default [
   {
     route: '/',
