@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom"
 import { ICategory } from "../../@types"
 import "./Header.scss"
 
@@ -5,30 +6,26 @@ interface HeaderProps {
   categories: ICategory[]
   isZenModeEnabled: boolean
   changeZenMode: React.Dispatch<React.SetStateAction<boolean>>
-  search: string
 }
 
 function Header({
   categories,
   isZenModeEnabled,
   changeZenMode,
-  search,
 }: HeaderProps) {
   return (
     <header className="menu" id="header">
       <nav>
         {categories.map((category) => (
-          <a
-            className={
-              search.toLowerCase() === category.label.toLowerCase()
-                ? "menu-link selected"
-                : "menu-link"
+          <NavLink
+            to={`/categ/${category.label.toLowerCase()}`}
+            className={({ isActive }) =>
+              isActive ? "menu-link selected" : "menu-link"
             }
-            href={category.route}
             key={category.label}
           >
             {category.label}
-          </a>
+          </NavLink>
         ))}
         <button
           className="menu-btn"

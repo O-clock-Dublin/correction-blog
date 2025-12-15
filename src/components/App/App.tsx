@@ -112,7 +112,6 @@ function App() {
         categories={categories}
         isZenModeEnabled={zenModeEnabled}
         changeZenMode={setZenModeEnabled}
-        search={search}
       />
       <input
         type="text"
