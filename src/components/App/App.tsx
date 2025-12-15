@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef  } from "react"
 import { BrowserRouter, Routes, Route, useParams } from "react-router"
+
 
 
 import postsData from "../../data/posts"
@@ -20,6 +21,8 @@ function App() {
   const [categories, setCategories] = useState<ICategory[]>([])
   const [search, setSearch] = useState("")
   const [postError, setPostError] = useState("")
+
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.trim().toLowerCase()
@@ -59,6 +62,12 @@ function App() {
   useEffect(() => {
     fetchPosts()
     fetchCategories()
+  }, [])
+
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus()
+    }
   }, [])
 
   // --- Pages internes ---
@@ -111,6 +120,7 @@ function App() {
             element={
               <>
                 <input
+                  ref={searchInputRef} 
                   type="text"
                   className="search"
                   placeholder="Rechercher dans les articles..."
