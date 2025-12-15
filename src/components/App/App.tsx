@@ -7,6 +7,8 @@ import Posts from "../Posts/Posts"
 
 import "./App.scss"
 import { ICategory, IPost } from "../../@types"
+import { Route, Routes } from "react-router"
+import GetLabel from "../page/GetLabel"
 
 function App() {
   //Je prépare mes endpoints dans des constantes
@@ -108,12 +110,14 @@ function App() {
 
   return (
     <div className="app">
+
       <Header
         categories={categories}
         isZenModeEnabled={zenModeEnabled}
         changeZenMode={setZenModeEnabled}
         search={search}
       />
+
       <input
         type="text"
         className="search"
@@ -121,12 +125,18 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
+
       {postError ? (
         <p>{postError}</p>
       ) : (
         <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
       )}
+      <Routes>
+        <Route path="/categ/:tag" element={<GetLabel />} /> 
+      </Routes>
+
       <Footer />
+
     </div>
   )
 }

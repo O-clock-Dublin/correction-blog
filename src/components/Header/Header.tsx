@@ -1,5 +1,6 @@
 import { ICategory } from "../../@types"
 import "./Header.scss"
+import {  NavLink } from "react-router"
 
 interface HeaderProps {
   categories: ICategory[]
@@ -18,17 +19,17 @@ function Header({
     <header className="menu" id="header">
       <nav>
         {categories.map((category) => (
-          <a
+          <NavLink
             className={
               search.toLowerCase() === category.label.toLowerCase()
                 ? "menu-link selected"
                 : "menu-link"
             }
-            href={category.route}
+            to={`/categ/${category.label}`}
             key={category.label}
           >
             {category.label}
-          </a>
+          </NavLink>
         ))}
         <button
           className="menu-btn"
