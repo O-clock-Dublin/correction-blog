@@ -4,6 +4,10 @@ import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
 import Header from "../Header/Header"
 import Posts from "../Posts/Posts"
+import CategoryPage from "../CategoryPage/CategoryPage"
+import Post from "../Post/Post"
+
+import { BrowserRouter, Route, Routes } from "react-router"
 
 import "./App.scss"
 import { ICategory, IPost } from "../../@types"
@@ -36,7 +40,7 @@ function App() {
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
-  function handleChangeSearchInput(e) {
+  function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     //Je récupère la valeur de l'input
     const value = e.target.value.trim().toLowerCase()
     setSearch(value)
@@ -107,27 +111,35 @@ function App() {
   // }
 
   return (
-    <div className="app">
-      <Header
-        categories={categories}
-        isZenModeEnabled={zenModeEnabled}
-        changeZenMode={setZenModeEnabled}
-        search={search}
-      />
-      <input
-        type="text"
-        className="search"
-        placeholder="Rechercher dans les articles..."
-        value={search}
-        onChange={handleChangeSearchInput}
-      />
-      {postError ? (
-        <p>{postError}</p>
-      ) : (
-        <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
-      )}
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div className="app">
+        <Header
+          categories={categories}
+          isZenModeEnabled={zenModeEnabled}
+          changeZenMode={setZenModeEnabled}
+          search={search}
+        />
+        <input
+          type="text"
+          className="search"
+          placeholder="Rechercher dans les articles..."
+          value={search}
+          onChange={handleChangeSearchInput}
+        />
+        <Routes>
+          <Route
+            path="/"
+            element={<Posts posts={posts} isZenModeEnabled={zenModeEnabled} />}
+          />
+          <Route
+            path="/categ/:category"
+            element={<CategoryPage posts={posts} isZenModeEnabled={zenModeEnabled} />}
+          />
+        </Routes>
+        <Footer />
+      </div>
+    </BrowserRouter>
+    
   )
 }
 

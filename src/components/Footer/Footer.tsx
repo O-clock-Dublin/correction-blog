@@ -13,7 +13,7 @@ function Footer() {
 
   //Je crée une fonction qui gère l'input password
   //qui modifie la valeur de password
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     //Je cache l'encart de confirmation
     setIsSubmitted(false)
     //Je recupère la valeur de l'input utilisateur

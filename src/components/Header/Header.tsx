@@ -1,4 +1,5 @@
 import { ICategory } from "../../@types"
+import { Link } from "react-router"
 import "./Header.scss"
 
 interface HeaderProps {
@@ -17,34 +18,38 @@ function Header({
   return (
     <header className="menu" id="header">
       <nav>
-        {categories.map((category) => (
-          <a
-            className={
-              search.toLowerCase() === category.label.toLowerCase()
-                ? "menu-link selected"
-                : "menu-link"
-            }
-            href={category.route}
-            key={category.label}
-          >
-            {category.label}
-          </a>
-        ))}
+        <Link
+          className={location.pathname === "/" ? "menu-link selected" : "menu-link"}
+          to="/"
+        >
+          Accueil
+        </Link>
+        {categories.slice(1).map((category) => {
+          const isSelected =
+            location.pathname === category.route ||
+            search.toLowerCase() === category.label.toLowerCase();
+
+          return (
+            <Link
+              className={isSelected ? "menu-link selected" : "menu-link"}
+              to={`/categ/${category.label.toLowerCase()}`}
+              key={category.label}
+            >
+              {category.label}
+            </Link>
+          );
+        })}
+
         <button
           className="menu-btn"
           type="button"
-          onClick={() => {
-            // on change dans le state de App : le contraire de la valeur actuelle
-            changeZenMode(!isZenModeEnabled)
-
-            // meilleure pratique : https://react.dev/learn/state-as-a-snapshot
-          }}
+          onClick={() => changeZenMode(!isZenModeEnabled)}
         >
           {isZenModeEnabled ? "Désactiver" : "Activer"} le mode zen
         </button>
       </nav>
     </header>
-  )
+  );
 }
 
 export default Header
