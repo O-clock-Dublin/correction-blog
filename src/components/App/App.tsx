@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { BrowserRouter, Routes, Route, useParams } from "react-router"
 
+
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
 import Header from "../Header/Header"
@@ -61,12 +62,17 @@ function App() {
   }, [])
 
   // --- Pages internes ---
-  function CategoryPage() {
-    const { slug } = useParams<{ slug: string }>()
+  function CategoryPage({ posts }: { posts: IPost[] }) {
+    const { slug } = useParams<{ slug: string }>() // récupère le paramètre dans l'URL
+
+    // filtre les posts dont la catégorie correspond au slug
     const filteredPosts = posts.filter(
       (post) => post.category.toLowerCase() === slug?.toLowerCase()
     )
-    return <Posts posts={filteredPosts} isZenModeEnabled={zenModeEnabled} />
+
+    if (filteredPosts.length === 0) return <p>Aucun article pour cette catégorie</p>
+
+    return <Posts posts={filteredPosts} isZenModeEnabled={false} />
   }
 
   function slugify(text: string) {
@@ -79,10 +85,12 @@ function App() {
     .replace(/^-|-$/g, "") // supprime les "-" début/fin
 }
 
-  function PostPage() {
+  function PostPage({ posts }: { posts: IPost[] }) {
     const { slug } = useParams<{ slug: string }>()
     const post = posts.find((p) => slugify(p.title) === slug)
+
     if (!post) return <p>Post non trouvé</p>
+
     return <Post post={post} />
   }
 
@@ -119,10 +127,10 @@ function App() {
           />
 
           {/* Page catégorie */}
-          <Route path="/categ/:slug" element={<CategoryPage />} />
+          <Route path="/categ/:slug" element={<CategoryPage posts={posts} />} />
 
           {/* Page post */}
-          <Route path="/post/:slug" element={<PostPage />} />
+          <Route path="/post/:slug" element={<PostPage posts={posts} />} />
 
           {/* Fallback */}
           <Route path="*" element={<p>Page non trouvée</p>} />
