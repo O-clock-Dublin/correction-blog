@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 
-import categoriesData from "../../data/categories"
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
 import Header from "../Header/Header"
@@ -110,7 +109,7 @@ function App() {
   return (
     <div className="app">
       <Header
-        categories={categoriesData}
+        categories={categories}
         isZenModeEnabled={zenModeEnabled}
         changeZenMode={setZenModeEnabled}
         search={search}
