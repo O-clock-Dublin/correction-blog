@@ -1,5 +1,6 @@
 import { ICategory } from "../../@types"
 import "./Header.scss"
+import { NavLink } from "react-router"
 
 interface HeaderProps {
   categories: ICategory[]
@@ -18,33 +19,34 @@ function Header({
     <header className="menu" id="header">
       <nav>
         {categories.map((category) => (
-          <a
-            className={
-              search.toLowerCase() === category.label.toLowerCase()
-                ? "menu-link selected"
-                : "menu-link"
-            }
-            href={category.route}
+          <NavLink
             key={category.label}
+            to={category.route}
+            className={({ isActive }) =>
+              [
+                "menu-link",
+                isActive ||
+                search.toLowerCase() === category.label.toLowerCase()
+                  ? "selected"
+                  : "",
+              ].join(" ")
+            }
           >
             {category.label}
-          </a>
+          </NavLink>
         ))}
+
         <button
           className="menu-btn"
           type="button"
-          onClick={() => {
-            // on change dans le state de App : le contraire de la valeur actuelle
-            changeZenMode(!isZenModeEnabled)
-
-            // meilleure pratique : https://react.dev/learn/state-as-a-snapshot
-          }}
+          onClick={() => changeZenMode(!isZenModeEnabled)}
         >
           {isZenModeEnabled ? "Désactiver" : "Activer"} le mode zen
         </button>
       </nav>
     </header>
-  )
+  );
 }
+
 
 export default Header
