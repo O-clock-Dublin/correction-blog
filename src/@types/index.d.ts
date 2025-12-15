@@ -6,7 +6,7 @@ export interface IPost {
   category: string
   title: string
   excerpt: string
-  content: string
+  content?: string
 }
 
 // objet qui correspond à une catégorie

@@ -13,14 +13,11 @@ function Footer() {
 
   //Je crée une fonction qui gère l'input password
   //qui modifie la valeur de password
-  function handleChange(e) {
-    //Je cache l'encart de confirmation
-    setIsSubmitted(false)
-    //Je recupère la valeur de l'input utilisateur
-    const input = e.target.value
-    // Je la stocke dans mon state email
-    setEmail(input)
-  }
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const input = e.target.value
+  setIsSubmitted(false)
+  setEmail(input)
+}
 
   //Je crée une fonction qui gère l'envoi du formulaire
   function handleSubmit() {
