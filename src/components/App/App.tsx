@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-
-import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
 import Header from "../Header/Header"
-import Posts from "../Posts/Posts"
-
 import "./App.scss"
 import { ICategory, IPost } from "../../@types"
+import { Route, Routes } from "react-router"
+import PostsPage from "../page/PostsPage"
+import CategoryPage from "../page/CategoryPage"
+import PostPage from "../page/PostPage"
 
 function App() {
   //Je prépare mes endpoints dans des constantes
@@ -36,12 +36,12 @@ function App() {
 
   //Je crée la fonction qui me permet de mettre à jour le state search
   // dès que l'utilisateur tape sur le clavier
-  function handleChangeSearchInput(e) {
+  function handleChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     //Je récupère la valeur de l'input
     const value = e.target.value.trim().toLowerCase()
     setSearch(value)
     //filtrer les posts pour ne garder que les posts correspondant à la recherche
-    const filteredPosts = postsData.filter((post) =>
+    const filteredPosts: IPost[] = posts.filter((post) =>
       post.title.toLowerCase().includes(value)
     )
     setPosts(filteredPosts)
@@ -121,11 +121,25 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
-      {postError ? (
-        <p>{postError}</p>
-      ) : (
-        <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PostsPage
+              zenModeEnabled={zenModeEnabled}
+              posts={posts}
+              postError={postError}
+            />
+          }
+        />
+        <Route
+          path={"/categ/:route"}
+          element={
+            <CategoryPage posts={posts} zenModeEnabled={zenModeEnabled} />
+          }
+        />
+        <Route path="/post/:slug" element={<PostPage posts={posts} />} />
+      </Routes>
       <Footer />
     </div>
   )
