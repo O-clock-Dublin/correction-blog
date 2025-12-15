@@ -1,11 +1,12 @@
-import { ICategory } from "../../@types"
-import "./Header.scss"
+import { NavLink } from "react-router";
+import { ICategory } from "../../@types";
+import "./Header.scss";
 
 interface HeaderProps {
-  categories: ICategory[]
-  isZenModeEnabled: boolean
-  changeZenMode: React.Dispatch<React.SetStateAction<boolean>>
-  search: string
+  categories: ICategory[];
+  isZenModeEnabled: boolean;
+  changeZenMode: React.Dispatch<React.SetStateAction<boolean>>;
+  search: string;
 }
 
 function Header({
@@ -18,24 +19,24 @@ function Header({
     <header className="menu" id="header">
       <nav>
         {categories.map((category) => (
-          <a
+          <NavLink
             className={
               search.toLowerCase() === category.label.toLowerCase()
                 ? "menu-link selected"
                 : "menu-link"
             }
-            href={category.route}
+            to={category.route}
             key={category.label}
           >
             {category.label}
-          </a>
+          </NavLink>
         ))}
         <button
           className="menu-btn"
           type="button"
           onClick={() => {
             // on change dans le state de App : le contraire de la valeur actuelle
-            changeZenMode(!isZenModeEnabled)
+            changeZenMode(!isZenModeEnabled);
 
             // meilleure pratique : https://react.dev/learn/state-as-a-snapshot
           }}
@@ -44,7 +45,7 @@ function Header({
         </button>
       </nav>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

@@ -1,22 +1,22 @@
 export default [
   {
-    route: '/',
-    label: 'Accueil',
+    route: "/",
+    label: "Accueil",
   },
   {
-    route: '/angular',
-    label: 'Angular',
+    route: "/categ/angular",
+    label: "Angular",
   },
   {
-    route: '/react',
-    label: 'React',
+    route: "/categ/react",
+    label: "React",
   },
   {
-    route: '/oclock',
-    label: 'O’clock',
+    route: "/categ/oclock",
+    label: "O’clock",
   },
   {
-    route: '/autre',
-    label: 'Autre',
+    route: "/categ/autre",
+    label: "Autre",
   },
 ];
