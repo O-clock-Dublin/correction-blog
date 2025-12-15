@@ -70,12 +70,14 @@ function App() {
   }
 
   function slugify(text: string) {
-    return text
-      .toLowerCase()
-      .replace(/[’']/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")
-  }
+  return text
+    .toLowerCase()
+    .normalize("NFD") // sépare les accents
+    .replace(/[\u0300-\u036f]/g, "") // supprime les accents
+    .replace(/[’'?,.]/g, "") // supprime ponctuation
+    .replace(/[^a-z0-9]+/g, "-") // remplace tout le reste par "-"
+    .replace(/^-|-$/g, "") // supprime les "-" début/fin
+}
 
   function PostPage() {
     const { slug } = useParams<{ slug: string }>()
