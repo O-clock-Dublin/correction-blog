@@ -1,8 +1,8 @@
-import { IPost } from '../../@types';
-import './Post.scss';
+import { IPost } from "../../@types"
+import "./Post.scss"
 
 interface PostProps {
-  post: IPost;
+  post: IPost
 }
 
 // rôle : afficher un article
@@ -13,7 +13,7 @@ function Post({ post }: PostProps) {
       <div className="post-category">{post.category}</div>
       <p className="post-excerpt">{post.excerpt}</p>
     </article>
-  );
+  )
 }
 
-export default Post;
+export default Post
