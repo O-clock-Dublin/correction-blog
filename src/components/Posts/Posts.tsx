@@ -23,11 +23,11 @@ function Posts({ posts, isZenModeEnabled }: PostsProps) {
   return (
     <main className={cssClass}>
       <h1 className="posts-title">Dev Of Thrones</h1>
-      <div className="posts-list">
+      <ul className="posts-list">
         {posts.map((currentPost) => (
           <Post key={currentPost.id} post={currentPost} />
         ))}
-      </div>
+      </ul>
     </main>
   );
 }
