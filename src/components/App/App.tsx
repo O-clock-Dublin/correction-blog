@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { BrowserRouter, Routes, Route } from "react-router"
 
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
@@ -107,6 +108,7 @@ function App() {
   // }
 
   return (
+    <BrowserRouter>
     <div className="app">
       <Header
         categories={categories}
@@ -114,20 +116,35 @@ function App() {
         changeZenMode={setZenModeEnabled}
         search={search}
       />
-      <input
-        type="text"
-        className="search"
-        placeholder="Rechercher dans les articles..."
-        value={search}
-        onChange={handleChangeSearchInput}
-      />
-      {postError ? (
-        <p>{postError}</p>
-      ) : (
-        <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
-      )}
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <input
+                type="text"
+                className="search"
+                placeholder="Rechercher dans les articles..."
+                value={search}
+                onChange={handleChangeSearchInput}
+              />
+
+              {postError ? (
+                <p>{postError}</p>
+              ) : (
+                <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
+              )}
+            </>
+          }
+        />
+
+        <Route path="*" element={<p>Page non trouvée</p>} />
+      </Routes>
+
       <Footer />
     </div>
+  </BrowserRouter>
   )
 }
 
