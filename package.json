@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router": "^7.10.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.2",
@@ -20,5 +21,21 @@
     "sass": "^1.77.8",
     "typescript": "^5.2.2",
     "vite": "^5.3.4"
-  }
+  },
+  "description": "On va continuer la mise en place du blog.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-clock-Dublin/correction-blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-clock-Dublin/correction-blog/issues"
+  },
+  "homepage": "https://github.com/O-clock-Dublin/correction-blog#readme"
 }
