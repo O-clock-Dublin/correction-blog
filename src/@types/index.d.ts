@@ -4,6 +4,7 @@
 export interface IPost {
   id: number
   category: string
+  slug: string
   title: string
   excerpt: string
   content: string

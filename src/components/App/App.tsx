@@ -3,10 +3,13 @@ import { useEffect, useState } from "react"
 import postsData from "../../data/posts"
 import Footer from "../Footer/Footer"
 import Header from "../Header/Header"
-import Posts from "../Posts/Posts"
 
 import "./App.scss"
 import { ICategory, IPost } from "../../@types"
+import { BrowserRouter, Route, Routes } from "react-router"
+import PostsPage from "../../page/PostsPage"
+import CategoryPage from "../../page/CategoryPage"
+import PostPage from "../../page/PostPage"
 
 function App() {
   //Je prépare mes endpoints dans des constantes
@@ -59,6 +62,7 @@ function App() {
       // Etape deux, je transforme la Promise en données exploitables
       if (response.ok) {
         const postsFromApi = await response.json()
+        console.log(postsFromApi)
         //J'hydrate mon state posts via le setter
         setPosts(postsFromApi)
       } else {
@@ -107,6 +111,7 @@ function App() {
   // }
 
   return (
+    <BrowserRouter>
     <div className="app">
       <Header
         categories={categories}
@@ -121,13 +126,25 @@ function App() {
         value={search}
         onChange={handleChangeSearchInput}
       />
-      {postError ? (
-        <p>{postError}</p>
-      ) : (
-        <Posts posts={posts} isZenModeEnabled={zenModeEnabled} />
-      )}
+      <Routes>
+        <Route path="/" element={
+          <PostsPage
+          zenModeEnabled={zenModeEnabled}
+          posts={posts}
+          postError={postError}
+        />
+        }
+        />
+        <Route 
+          path={"/categ/:route"}
+          element={<CategoryPage posts={posts} zenModeEnabled={zenModeEnabled} />}
+        />
+
+        <Route path="/post/:slug" element={<PostPage posts={posts} />} />
+      </Routes>
       <Footer />
     </div>
+    </BrowserRouter>
   )
 }
 
